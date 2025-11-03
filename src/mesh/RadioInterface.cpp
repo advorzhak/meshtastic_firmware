@@ -37,7 +37,8 @@ const RegionInfo regions[] = {
         https://www.etsi.org/deliver/etsi_en/300200_300299/30022002/03.02.01_60/en_30022002v030201p.pdf
         FIXME: https://github.com/meshtastic/firmware/issues/3371
      */
-    RDEF(EU_433, 433.0f, 434.0f, 10, 0, 10, true, false, false),
+    // tx power 10 mW - overrided to 2 W
+    RDEF(EU_433, 433.0f, 434.0f, 10, 0, 33, true, false, false),
 
     /*
        https://www.thethingsnetwork.org/docs/lorawan/duty-cycle/
@@ -120,10 +121,10 @@ const RegionInfo regions[] = {
     RDEF(TH, 920.0f, 925.0f, 100, 0, 16, true, false, false),
 
     /*
-        433,05-434,7 Mhz 10 mW
+        433,05-434,7 Mhz 10 mW - overrided to 2 W
         https://nkrzi.gov.ua/images/upload/256/5810/PDF_UUZ_19_01_2016.pdf
     */
-    RDEF(UA_433, 433.0f, 434.7f, 10, 0, 10, true, false, false),
+    RDEF(UA_433, 433.0f, 434.7f, 10, 0, 33, true, false, false),
 
     /*
         868,0-868,6 Mhz 25 mW
