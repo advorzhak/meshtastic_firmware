@@ -1022,6 +1022,7 @@ void NodeDB::installDefaultConfig(bool preserveKey = false)
     resetRadioConfig(true); // This also triggers NodeInfo/Position requests since we're fresh
     strncpy(config.network.ntp_server, "meshtastic.pool.ntp.org", 32);
 
+// trunk-ignore-next-line(too-many-defined/too-many-defined): 9-driver TFT chain; refactor to HAS_TFT macro
 #if (defined(T_DECK) || defined(T_WATCH_S3) || defined(UNPHONE) || defined(PICOMPUTER_S3) || defined(SENSECAP_INDICATOR) ||      \
      defined(ELECROW_PANEL) || defined(HELTEC_V4_TFT) || defined(HELTEC_V4_R8_TFT) || defined(RAK_WISMESH_TAP_V2)) &&            \
     HAS_TFT
@@ -3801,8 +3802,8 @@ bool NodeDB::isFromOrToFavoritedNode(const meshtastic_MeshPacket &p)
         if (seenFrom && seenTo)
             return false; // we've seen both, and neither is a favorite, so we can stop searching early
 
-        // Note: if we knew that sortMeshDB was always called after any change to is_favorite, we could exit early after searching
-        // all favorited nodes first.
+        // Note: if we knew that sortMeshDB was always called after any change to is_favorite, we could exit early after
+        // searching all favorited nodes first.
     }
 
     return false;

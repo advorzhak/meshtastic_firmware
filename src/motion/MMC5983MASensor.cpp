@@ -66,7 +66,7 @@ int32_t MMC5983MASensor::runOnce()
 {
     float magX = 0, magY = 0, magZ = 0;
     if (!readMagnetometer(magX, magY, magZ)) {
-        return MMC5983MA_UPDATE_INTERVAL_MS;
+        return MOTION_SENSOR_CHECK_INTERVAL_MS;
     }
 
 #if !defined(MESHTASTIC_EXCLUDE_SCREEN)
@@ -78,19 +78,9 @@ int32_t MMC5983MASensor::runOnce()
     }
 #endif
 
-    // Hard-iron bias removal.
-    magX -= (highestX + lowestX) * 0.5f;
-    magY -= (highestY + lowestY) * 0.5f;
-    magZ -= (highestZ + lowestZ) * 0.5f;
-
-    // Soft-iron diagonal scaling from calibration extrema.
-    const float radiusX = (highestX - lowestX) * 0.5f;
-    const float radiusY = (highestY - lowestY) * 0.5f;
-    const float radiusZ = (highestZ - lowestZ) * 0.5f;
-    const float avgRadius = (radiusX + radiusY + radiusZ) / 3.0f;
-    magX *= (radiusX > MMC5983MA_MIN_AXIS_RADIUS) ? (avgRadius / radiusX) : 1.0f;
-    magY *= (radiusY > MMC5983MA_MIN_AXIS_RADIUS) ? (avgRadius / radiusY) : 1.0f;
-    magZ *= (radiusZ > MMC5983MA_MIN_AXIS_RADIUS) ? (avgRadius / radiusZ) : 1.0f;
+    magX -= (highestX + lowestX) / 2;
+    magY -= (highestY + lowestY) / 2;
+    magZ -= (highestZ + lowestZ) / 2;
 
 #if !defined(MESHTASTIC_EXCLUDE_SCREEN) && HAS_SCREEN
     float heading;
@@ -109,22 +99,20 @@ int32_t MMC5983MASensor::runOnce()
         heading = FusionCompass(ga, ma, FusionConventionNed) + MMC5983MA_HEADING_OFFSET_DEG;
     } else {
         heading = atan2f(magY, magX) * RAD_TO_DEG + MMC5983MA_HEADING_OFFSET_DEG;
+        if (heading < 0.0f) {
+            heading += 360.0f;
+        } else if (heading >= 360.0f) {
+            heading -= 360.0f;
+        }
     }
 
-    if (heading >= 360.0f)
-        heading -= 360.0f;
-    else if (heading < 0.0f)
-        heading += 360.0f;
-    heading = 360.0f - heading;
-    if (heading >= 360.0f)
-        heading -= 360.0f;
-
     heading = applyCompassOrientation(heading);
-    if (screen)
+    if (screen) {
         screen->setHeading(heading);
+    }
 #endif
 
-    return MMC5983MA_UPDATE_INTERVAL_MS;
+    return MOTION_SENSOR_CHECK_INTERVAL_MS;
 }
 
 void MMC5983MASensor::calibrate(uint16_t forSeconds)

@@ -67,7 +67,7 @@ typedef uint16_t word;
 #define bitToggle(v, b) ((v) ^= (1UL << (b)))
 #define bitWrite(v, b, x) ((x) ? bitSet(v, b) : bitClear(v, b))
 #define bit(b) (1UL << (b))
-#define lowByte(w) ((uint8_t)((w)&0xff))
+#define lowByte(w) ((uint8_t)((w) & 0xff))
 #define highByte(w) ((uint8_t)((w) >> 8))
 // word(h,l) - only define if not already defined (conflicts with typedef above)
 #undef word
@@ -165,9 +165,9 @@ using std::min;
 #define abs(x) ((x) >= 0 ? (x) : -(x))
 #endif
 #define constrain(x, l, h) ((x) < (l) ? (l) : ((x) > (h) ? (h) : (x)))
-#define round(x) ((x) >= 0 ? (long)((x) + 0.5) : (long)((x)-0.5))
-#define radians(d) ((d)*DEG_TO_RAD)
-#define degrees(r) ((r)*RAD_TO_DEG)
+#define round(x) ((x) >= 0 ? (long)((x) + 0.5) : (long)((x) - 0.5))
+#define radians(d) ((d) * DEG_TO_RAD)
+#define degrees(r) ((r) * RAD_TO_DEG)
 #define sq(x) ((x) * (x))
 
 // ── Random ───────────────────────────────────────────────────────────────────
@@ -818,7 +818,7 @@ static inline char toLowerCase(char c)
 #define abs(x) ((x) >= 0 ? (x) : -(x))
 #endif
 #define constrain(x, l, h) ((x) < (l) ? (l) : ((x) > (h) ? (h) : (x)))
-#define round(x) ((x) >= 0 ? (long)((x) + 0.5) : (long)((x)-0.5))
+#define round(x) ((x) >= 0 ? (long)((x) + 0.5) : (long)((x) - 0.5))
 #endif /* __cplusplus */
 
 #endif /* Arduino_h */

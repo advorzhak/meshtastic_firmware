@@ -1,0 +1,36 @@
+@startuml
+title BitChat Bridge - BLE to Mesh and Mesh to BLE
+
+actor "BitChat App" as App
+participant "BitChat BLE\nCharacteristic" as BLE
+participant "BitChatBridgeModule" as Bridge
+participant "Router" as Router
+participant "MeshService" as Service
+participant "LoRa Mesh" as Mesh
+participant "Remote BitChatBridgeModule" as RemoteBridge
+
+== BLE -> Mesh ==
+App -> BLE : Write BitChat frame
+BLE -> Bridge : handleBleWrite(data)
+Bridge -> Bridge : parse + dedupe + TTL handling
+Bridge -> Router : allocForSending()
+Router --> Bridge : meshtastic_MeshPacket
+Bridge -> Service : sendToMesh(PRIVATE_APP + BCHT)
+Service -> Mesh : transmit
+
+== Mesh -> BLE ==
+Mesh -> RemoteBridge : receive PRIVATE_APP + BCHT
+RemoteBridge -> RemoteBridge : parse + dedupe
+RemoteBridge -> BLE : notify(serialized BitChat frame)
+BLE -> App : BitChat frame delivered
+
+== Announcements ==
+Bridge -> Bridge : createPeerAnnouncement()
+note over Bridge
+Nickname truncation is UTF-8-safe,
+so multibyte characters (for example
+Ukrainian symbols) are not split.
+end note
+Bridge -> BLE : periodic announce notify
+
+@enduml

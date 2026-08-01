@@ -1,0 +1,50 @@
+@startuml
+title Meshtastic Module Class Relationships
+
+class MeshModule {
+  +handleReceived(mp)
+  +wantPacket(p)
+}
+
+class SinglePortModule {
+  -ourPortNum
+  +wantPacket(p)
+}
+
+class "concurrency::OSThread" as OSThread {
+  +runOnce()
+  +setIntervalFromNow()
+}
+
+class BitChatBridgeModule {
+  +handleReceived(mp)
+  +runOnce()
+  -parseBitChatMessage()
+  -createMeshPacket()
+  -createPeerAnnouncement()
+}
+
+class Router {
+  +allocForSending()
+}
+
+class MeshService {
+  +sendToMesh(packet)
+}
+
+MeshModule <|-- SinglePortModule
+SinglePortModule <|-- BitChatBridgeModule
+OSThread <|-- BitChatBridgeModule
+
+BitChatBridgeModule --> Router : alloc packet
+BitChatBridgeModule --> MeshService : relay to mesh
+
+note right of BitChatBridgeModule
+  BitChatBridgeModule handles:
+  - BLE <-> Mesh relay
+  - duplicate suppression
+  - TTL clamping/decrement
+  - UTF-8-safe nickname truncation
+end note
+
+@enduml

@@ -21,7 +21,7 @@ class MotionSensor
 {
   public:
     explicit MotionSensor(ScanI2C::FoundDevice foundDevice);
-    virtual ~MotionSensor(){};
+    virtual ~MotionSensor() {};
 
     // Get the device type
     ScanI2C::DeviceType deviceType();
@@ -40,7 +40,7 @@ class MotionSensor
     // Refer to /src/concurrency/OSThread.h for more information
     inline virtual int32_t runOnce() { return MOTION_SENSOR_CHECK_INTERVAL_MS; };
 
-    virtual void calibrate(uint16_t forSeconds){};
+    virtual void calibrate(uint16_t forSeconds) {};
 
     // True if this sensor produces the compass heading (screen->setHeading()) in runOnce().
     // Combined accel+magnetometer parts (e.g. BMX160, ICM20948) and standalone magnetometers

@@ -877,9 +877,9 @@ void setup()
         playStartMelody();
 
 #if HAS_SCREEN
-        // fixed screen override?
-        // The geometry picks below are skipped on variants that pin the panel size with
-        // OLED_GEOMETRY_OVERRIDE (see the end of this block) - there they would only be dead stores.
+    // fixed screen override?
+    // The geometry picks below are skipped on variants that pin the panel size with
+    // OLED_GEOMETRY_OVERRIDE (see the end of this block) - there they would only be dead stores.
 #if defined(USE_SH1107)
     screen_model = meshtastic_Config_DisplayConfig_OledType_OLED_SH1107; // set dimension of 128x128
 #ifndef OLED_GEOMETRY_OVERRIDE
@@ -980,7 +980,7 @@ void setup()
     SPI.begin();
 #endif
 #else
-        // ESP32
+    // ESP32
 #if defined(HW_SPI1_DEVICE)
     SPI1.begin(LORA_SCK, LORA_MISO, LORA_MOSI, LORA_CS);
     LOG_DEBUG("SPI1.begin(SCK=%d, MISO=%d, MOSI=%d, NSS=%d)", LORA_SCK, LORA_MISO, LORA_MOSI, LORA_CS);
@@ -1177,7 +1177,7 @@ void setup()
 
 #ifndef ARCH_PORTDUINO
 
-        // Initialize Wifi
+    // Initialize Wifi
 #if HAS_WIFI
     initWifi();
 #endif

@@ -23,7 +23,7 @@ static int lastBatteryLevel = -1; // last value written to BAS, to skip redundan
 #ifndef BLE_DFU_SECURE
 static BLEDfu bledfu; // DFU software update helper service
 #else
-static BLEDfuSecure bledfusecure;                                             // DFU software update helper service
+static BLEDfuSecure bledfusecure; // DFU software update helper service
 #endif
 
 // This scratch buffer is used for various bluetooth reads/writes - but it is safe because only one bt operation can be in

@@ -61,6 +61,7 @@
   // "USERPREFS_MQTT_ENABLED": "1",
   // "USERPREFS_MQTT_ADDRESS": "'mqtt.meshtastic.org'",
   // "USERPREFS_MQTT_USERNAME": "meshdev",
+  // trunk-ignore(checkov/CKV_SECRET_6): public Meshtastic community MQTT demo password, not a real secret
   // "USERPREFS_MQTT_PASSWORD": "large4cats",
   // "USERPREFS_MQTT_ENCRYPTION_ENABLED": "true",
   // "USERPREFS_MQTT_TLS_ENABLED": "false",

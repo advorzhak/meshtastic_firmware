@@ -1,5 +1,6 @@
 # trunk-ignore-all(hadolint/DL3008): Do not pin apt package versions
 # trunk-ignore-all(hadolint/DL3013): Do not pin pip package versions
+# trunk-ignore-all(hadolint/DL3066): Named USER root/vscode match the base image accounts
 FROM mcr.microsoft.com/devcontainers/cpp:2-debian-13
 
 USER root
@@ -26,6 +27,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     zip \
     usbutils \
     hwdata \
+    jq \
     gpg \
     gnupg2 \
     libusb-1.0-0-dev \

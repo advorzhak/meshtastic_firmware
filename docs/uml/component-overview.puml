@@ -1,0 +1,43 @@
+@startuml
+title Meshtastic Firmware - Component Overview
+
+actor "User / Operator" as User
+actor "Phone App\n(Meshtastic / BitChat)" as Phone
+cloud "MQTT Broker" as MQTT
+cloud "LoRa Mesh Network" as Mesh
+
+node "Meshtastic Firmware" as FW {
+  package "Core Mesh" {
+    [NodeDB]
+    [Router]
+    [MeshService]
+  }
+
+  package "Feature Modules" {
+    [TextMessageModule]
+    [PositionModule]
+    [Telemetry Modules]
+    [BitChatBridgeModule]
+  }
+
+  package "Platform Layer" {
+    [BLE Stack]
+    [Radio Interfaces]
+    [Hardware Variants]
+  }
+}
+
+User --> Phone
+Phone --> [BLE Stack] : BLE interactions
+[BLE Stack] --> [MeshService] : ingress/egress packets
+[Radio Interfaces] --> Mesh : RF transport
+[MeshService] --> [Router]
+[Router] --> [TextMessageModule]
+[Router] --> [PositionModule]
+[Router] --> [Telemetry Modules]
+[Router] --> [BitChatBridgeModule]
+[MeshService] --> MQTT : MQTT bridge
+[BitChatBridgeModule] --> [BLE Stack] : BitChat announcements + relays
+[BitChatBridgeModule] --> [MeshService] : PRIVATE_APP (BCHT)
+
+@enduml
