@@ -125,7 +125,8 @@ const RegionInfo regions[] = {
         https://www.etsi.org/deliver/etsi_en/300200_300299/30022002/03.02.01_60/en_30022002v030201p.pdf
         FIXME: https://github.com/meshtastic/firmware/issues/3371
      */
-    RDEF(EU_433, 433.0f, 434.0f, 10, 10, false, false, PROFILE_STD, PRESET(LONG_FAST), 0),
+    // tx power 10 mW - overridden to 2 W
+    RDEF(EU_433, 433.0f, 434.0f, 10, 33, false, false, PROFILE_STD, PRESET(LONG_FAST), 0),
     /*
         https://www.thethingsnetwork.org/docs/lorawan/duty-cycle/
         https://www.thethingsnetwork.org/docs/lorawan/regional-parameters/
@@ -222,7 +223,8 @@ const RegionInfo regions[] = {
         433,05-434,7 Mhz 10 mW
         https://zakon.rada.gov.ua/laws/show/262-2026-п
     */
-    RDEF(UA_433, 433.0f, 434.7f, 10, 10, false, false, PROFILE_STD, PRESET(LONG_FAST), 0),
+    // 433,05-434,7 Mhz 10 mW - overridden to 2 W
+    RDEF(UA_433, 433.0f, 434.7f, 10, 33, false, false, PROFILE_STD, PRESET(LONG_FAST), 0),
 
     /*
         Malaysia

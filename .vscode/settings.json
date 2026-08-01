@@ -8,7 +8,18 @@
   "[cpp]": {
     "editor.defaultFormatter": "trunk.io"
   },
+  "[c]": {
+    "editor.defaultFormatter": "trunk.io"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python"
+  },
   "[powershell]": {
     "editor.defaultFormatter": "ms-vscode.powershell"
-  }
+  },
+  "clangd.arguments": [
+    "--compile-commands-dir=/Users/advorzha/dev/advorzhak/meshtastic_firmware/.cache/clangd",
+    "--query-driver=/Users/advorzha/.platformio/packages/toolchain-*/bin/*,/Users/advorzha/.platformio/packages/tool-*/bin/*"
+  ],
+  "clangd.path": "/Users/advorzha/.platformio/packages/tool-clangd-esp/bin/clangd"
 }

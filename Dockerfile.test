@@ -1,3 +1,4 @@
+# trunk-ignore-all(hadolint/DL3066): Named USER meshtastic matches the useradd above
 # Lightweight container for running native PlatformIO tests on non-Linux hosts
 FROM python:3.14-slim-trixie
 
@@ -18,7 +19,7 @@ WORKDIR /firmware
 RUN chown -R meshtastic:meshtastic /firmware
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD platformio --version || exit 1
+    CMD ["platformio", "--version"]
 
 USER meshtastic
 

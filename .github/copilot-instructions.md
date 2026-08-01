@@ -661,63 +661,9 @@ Many devices are battery-powered:
 
 ## GitHub Actions CI/CD
 
-The project uses GitHub Actions extensively for CI/CD. Key workflows are in `.github/workflows/`:
+This fork has all GitHub Actions workflows disabled (`.yml` renamed to `.yml.disabled`). CI validation is performed locally - see the quick-reference command table in `AGENTS.md` and the test sections below.
 
-### Core CI Workflows
-
-- **`main_matrix.yml`** - Main CI pipeline, runs on push to `master`/`develop` and PRs
-  - Uses `bin/generate_ci_matrix.py` to dynamically generate build targets
-  - Builds all supported hardware variants
-  - PRs build a subset (`--level pr`) for faster feedback
-
-- **`trunk_check.yml`** - Code quality checks on PRs
-  - Runs Trunk.io for linting and formatting
-  - Must pass before merge
-
-- **`tests.yml`** - End-to-end and hardware tests
-  - Runs daily on schedule
-  - Includes native tests and hardware-in-the-loop testing
-
-- **`test_native.yml`** - Native platform unit tests
-  - Runs the `test/test_*` suites under `[env:coverage]`, sharded across a matrix. `bin/test-shards.py` derives the matrix from the tree - it groups suites into named areas, splits an area too big for one runner and packs the ones too small to fill one - so adding a suite needs no CI change. The `generate-reports` job collects every shard's JUnit report, checks the union against the canonical `test/test_*` set, and states the verdict; `Native PlatformIO Tests` is the single required check over the fan-out.
-
-### Release Workflows
-
-- **`release_channels.yml`** - Triggered on GitHub release publish
-  - Builds Docker images
-  - Packages for PPA (Ubuntu), OBS (openSUSE), and COPR (Fedora)
-  - Handles Alpha/Beta/Stable release channels
-
-- **`nightly.yml`** - Nightly builds from develop branch
-
-- **`docker_build.yml`** / **`docker_manifest.yml`** - Docker image builds
-
-### Build Matrix Generation
-
-The CI uses `bin/generate_ci_matrix.py` to dynamically select which targets to build:
-
-```bash
-# Generate full build matrix
-./bin/generate_ci_matrix.py all
-
-# Generate PR-level matrix (subset for faster builds)
-./bin/generate_ci_matrix.py all --level pr
-```
-
-Every variant env **must** declare a `board_level` in its `platformio.ini`; the matrix
-generator exits non-zero if any env is missing it or uses an unrecognized value:
-
-- `board_level = pr` - Smallest subset, built on every PR (and in every larger matrix)
-- `board_level = release` - The full release matrix, built on push / schedule / `workflow_dispatch`
-- `board_level = extra` - Opt-in only, built when explicitly requested via `--level extra`
-
-`custom_meshtastic_support_level` (1-3) is **not** part of this filtering. It is variant
-metadata that `bin/platformio-custom.py` emits as `supportLevel` in the generated
-hardware list; changing it does not change which targets CI builds.
-
-### Running Workflows Locally
-
-Most workflows can be triggered manually via `workflow_dispatch` for testing.
+<If you need to run upstream CI, fetch the workflow files from upstream and restore them individually after review. **Do not bulk-restore the workflow directory.**
 
 ## Testing
 
@@ -1011,14 +957,14 @@ If you're modifying `StreamAPI`, `PhoneAPI`, `NodeInfoModule`, or `userPrefs` fl
 | `tests/ui/` runs but captures are all 1×1 black PNGs                              | `MESHTASTIC_UI_CAMERA_DEVICE_ESP32S3`                         | Env var not set → `NullBackend`. Point a USB webcam at the heltec-v3 OLED and set the device index; `.venv/bin/python -c "import cv2; [print(i, cv2.VideoCapture(i).read()[0]) for i in range(5)]"` discovers it.                |
 | Tests fail only on first attempt then pass on rerun                               | -                                                             | State leak from a prior session. Run with `--force-bake` to reset to a known state.                                                                                                                                              |
 
-### Never do these without asking
+### Require explicit operator authorization
 
 - `factory_reset` - wipes node identity; regenerates PKI keypair. Mesh peers will reject old DMs until re-exchange. Legitimate only when the operator explicitly wants it.
 - `erase_and_flash` - full chip erase; destroys all on-device state.
 - `esptool_erase_flash` / `esptool_raw` write/erase - bypasses pio's safety chain.
 - `set_config` on `lora.region` - changes regulatory domain; requires physical-location context the operator has and the agent doesn't.
 - `reboot` / `shutdown` mid-test - breaks fixture invariants.
-- `push -f`, `rebase -i`, `reset --hard`, or any history-rewriting git operation.
+- `push -f`, `rebase -i`, `reset --hard`, or any other history-rewriting Git operation. Explicitly invoking the `sync-upstream` skill authorizes its documented `develop` rebase, amend, and force-with-lease push as one workflow when its preconditions pass. All other history rewrites require operator authorization.
 - Clicking computer-use tools on web links in Mail/Messages/PDFs - open URLs via the claude-in-chrome MCP so the extension's link-safety checks apply.
 
 ## Resources

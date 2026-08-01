@@ -73,12 +73,11 @@ Key rotation to never trigger casually: only the **full** factory reset (`factor
 
 ## House rules
 
-- **No destructive device operations without operator approval.** `factory_reset`, `erase_and_flash`, `reboot`, `shutdown`, history-rewriting git ops - describe the action and stop. Operator authorizes.
+- **No destructive device operations without operator approval.** `factory_reset`, `erase_and_flash`, `reboot`, and `shutdown` require operator approval. History-rewriting Git operations also require approval, except for the documented `sync-upstream` workflow: explicitly invoking it authorizes its `develop` rebase, amend, and force-with-lease push when its preconditions pass.
 - **One MCP call per serial port at a time.** The port lock is exclusive; concurrent calls deadlock. Sequence: open → read/mutate → close, then next device.
 - **`userPrefs.jsonc` is session state during tests.** The `_session_userprefs` fixture snapshots + restores it; never edit it from inside a test.
 - **Don't speculate about firmware root causes.** When evidence doesn't support a classification, say "unknown" and list what would disambiguate.
-- **Run `trunk fmt` before proposing a commit.** The `trunk_check` CI gate will reject unformatted code. Claude Code runs it automatically via the PostToolUse hook in `.claude/settings.json`; trunk's launcher needs `curl` or `wget` to bootstrap its pinned CLI - see **Formatting & the trunk toolchain** in `.github/copilot-instructions.md` for the no-curl bootstrap procedure.
-- **Never edit or commit files under `src/mesh/generated/`.** They are regenerated from the [`meshtastic/protobufs`](https://github.com/meshtastic/protobufs) repo by the `update_protobufs.yml` workflow (entry point: `bin/regen-protos.sh`). Local edits will be overwritten and create merge conflicts. If a `.proto` change is needed, open a PR against the protobufs repo first, then let the workflow re-sync this repo.
+- **Run `trunk fmt` before proposing a commit.** Local validation replaces CI checks in this fork.
 - **`confirm=True` on destructive MCP tools is a real gate, not a formality.** Don't bypass it via auto-approve settings.
 - **The `src/` naming rule does not apply under `test/`.** Suite directories and `test_*` functions follow their own rule and must not be renamed to match `src/`. What that rule is, and why: [**Test naming** in `.github/copilot-instructions.md`](.github/copilot-instructions.md#test-naming) - authoritative there, not restated here.
 - **Keep code comments minimal - one or two lines, max.** Comment only when the _why_ isn't obvious from the code; never restate what the next line does. No multi-paragraph block comments explaining straightforward changes. The diff and commit message carry the rationale; the code carries the behavior.
