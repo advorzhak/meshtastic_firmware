@@ -26,12 +26,13 @@ jobs:
     outputs:
       artifact-id: ${{ steps.upload-firmware.outputs.artifact-id }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0      - uses: actions/checkout@v7
         with:
           submodules: recursive
 
       - name: Build ${{ inputs.platform }}
         id: build
+        # trunk-ignore(pinact/parse-error): custom action can't be pinned
         uses: meshtastic/gh-action-firmware@main
         with:
           pio_platform: ${{ inputs.platform }}
@@ -112,7 +113,7 @@ jobs:
           echo "</details>" >> $GITHUB_STEP_SUMMARY
 
       - name: Store binaries as an artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1        uses: actions/upload-artifact@v7
         id: upload-firmware
         with:
           name: firmware-${{ inputs.platform }}-${{ inputs.pio_env }}-${{ inputs.version }}
@@ -130,7 +131,7 @@ jobs:
             release/device-*.bat
 
       - name: Store manifests as an artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1        uses: actions/upload-artifact@v7
         id: upload-manifest
         with:
           name: manifest-${{ inputs.platform }}-${{ inputs.pio_env }}-${{ inputs.version }}

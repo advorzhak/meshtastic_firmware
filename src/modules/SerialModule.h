@@ -13,6 +13,7 @@
 // SerialModule itself does not exist. Logs and notifies the client on rejection.
 bool serialConfigIsValid(const meshtastic_ModuleConfig_SerialConfig &config);
 
+// trunk-ignore-next-line(too-many-defined/too-many-defined): 6-arch serial guard
 #if (defined(ARCH_ESP32) || defined(ARCH_NRF52) || defined(ARCH_RP2040) || defined(ARCH_STM32WL)) &&                             \
     !defined(CONFIG_IDF_TARGET_ESP32S2) && !defined(CONFIG_IDF_TARGET_ESP32C3)
 
